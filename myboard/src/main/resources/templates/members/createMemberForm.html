@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+        border-color: #bd2130;
+        color: #bd2130;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="header" th:fragment="bodyHeader">
+                <a href="/"><h3 class="text-muted">MY BOARD</h3></a>
+            </div>
+            <div class="py-1 text-center">
+                <h2 th:text="#{page.createMemberForm}">회원 가입</h2>
+            </div>
+            <form role="form" action="/members/new" th:object="${addMemberForm}"
+                  method="post">
+                <div class="form-group">
+                    <label th:for="loginId" th:text="#{label.member.id}">Id</label>
+                    <input type="text" th:field="*{loginId}"
+                           th:errorclass="fieldError" class="form-control" placeholder="아이디를 입력하세요">
+                    <div class="fieldError" th:errors="*{loginId}"></div>
+                    <div th:if="${errorMessage}" class="fieldError" th:text="${errorMessage}"></div>
+                </div>
+                <div class="form-group">
+                    <label th:for="password" th:text="#{label.member.password}">Password</label>
+                    <input type="text" th:field="*{password}"
+                           th:errorclass="fieldError" class="form-control" placeholder="비밀번호를 입력하세요">
+                    <div class="fieldError" th:errors="*{password}"></div>
+                </div>
+                <div class="form-group">
+                    <label th:for="username" th:text="#{label.member.name}">Name</label>
+                    <input type="text" th:field="*{username}"
+                           th:errorclass="fieldError" class="form-control" placeholder="이름을 입력하세요">
+                    <div class="fieldError" th:errors="*{username}"></div>
+                </div>
+                <div class="form-group">
+                    <label th:for="email" th:text="#{label.member.email}">E-mail</label>
+                    <input type="text" th:field="*{email}"
+                           th:errorclass="fieldError" class="form-control" placeholder="이메일을 입력하세요">
+                    <div class="fieldError" th:errors="*{email}"></div>
+                </div>
+                <br/>
+                <button type="submit" class="w-100 btn btn-primary" th:text="#{button.submit}">Submit</button>
+            </form>
+            <br/>
+            <div th:replace="fragments/footer :: footer" />
+        </div>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

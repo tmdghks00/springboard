@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+            <div class="py-1 text-center">
+                <h2 th:text="#{page.boardList}">글 목록</h2>
+            </div>
+            <form role="form" action="/boards" method="post">
+                <div class="row">
+                    <div class="col">
+                        <h6 class="mb-3" th:text="|${member.loginId}님 환영합니다|">로그인 사용자 이름</h6>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary btn-secondary float-end"
+                                onclick="location.href='/boards/new'" th:text="#{button.newBoard}">글 작성</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th th:text="#{label.board.id}">No</th>
+                        <th th:text="#{label.board.title}">Title</th>
+                        <th th:text="#{label.board.writer}">Writer</th>
+                        <th th:text="#{label.board.date}">Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="board : ${boardPage.content}">
+                        <td th:text="${board.id}">1</td>
+                        <td>
+                            <a th:text="${board.title}" th:href="@{/boards/{id}(id=${board.id})}">제목입니다.</a>
+                        </td>
+                        <td th:text="${board.writer}">작성자입니다.</td>
+                        <td th:text="${#temporals.format(board.createdDateTime, 'yyyy-MM-dd HH:mm:ss')}">날짜 및 시간입니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <br/>
+            <div class="pagination">
+                <ul class="pagination">
+                    <li class="page-item" th:if="${boardPage.hasPrevious()}">
+                        <a class="page-link" th:href="@{/boards(page=${boardPage.number - 1}, size=${boardPage.size})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(1, boardPage.totalPages)}">
+                        <a class="page-link" th:href="@{/boards(page=${i - 1}, size=${boardPage.size})}"
+                           th:text="${i}" th:classappend="${boardPage.number + 1 == i} ? 'active'"></a>
+                    </li>
+                    <li class="page-item" th:if="${boardPage.hasNext()}">
+                        <a class="page-link" th:href="@{/boards(page=${boardPage.number + 1}, size=${boardPage.size})}">Next</a>
+                    </li>
+                </ul>
+            </div>
+            <br/>
+            <div th:replace="fragments/footer :: footer"></div>
+        </div>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

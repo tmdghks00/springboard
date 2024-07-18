@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="header" th:fragment="bodyHeader">
+                <a href="/"><h3 class="text-muted">MY BOARD</h3></a>
+            </div>
+            <div class="py-1 text-center">
+                <h2 th:text="#{page.home}">홈 화면</h2>
+            </div>
+            <div class="button-container">
+                <h6 class="mb-3" th:text="|${member.loginId}님 환영합니다|">로그인 사용자 이름</h6>
+
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="w-100 btn btn-primary btn-lg"
+                                onclick="location.href='boardList.html'"
+                                th:onclick="|location.href='@{/boards}'|" th:text="#{button.list}">글 목록</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="w-100 btn btn-secondary btn-lg"
+                                onclick="location.href='home.html'"
+                                th:onclick="|location.href='@{/members/{id} (id=${member.id})}'|"
+                                th:text="#{button.mypage}">마이페이지</button>
+                    </div>
+                    <div class="col">
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="w-100 btn btn-secondary btn-lg"
+                                    onclick="location.href='home.html'" th:text="#{button.logout}">로그아웃</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div th:replace="fragments/footer :: footer" />
+        </div>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

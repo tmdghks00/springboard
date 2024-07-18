@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="header" th:fragment="bodyHeader">
+                <a href="/"><h3 class="text-muted">MY BOARD</h3></a>
+            </div>
+            <div class="py-1 text-center">
+                <h2 th:text="#{page.mypage}">마이페이지</h2>
+            </div>
+            <form role="form" th:object="${member}" method="post">
+                <div class="form-group">
+                    <label th:for="loginId" th:text="#{label.member.id}">Id</label>
+                    <input type="text" th:field="*{loginId}" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label th:for="password" th:text="#{label.member.password}">Password</label>
+                    <input type="text" th:field="*{password}" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label th:for="username" th:text="#{label.member.name}">Name</label>
+                    <input type="text" th:field="*{username}" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label th:for="email" th:text="#{label.member.email}">E-mail</label>
+                    <input type="text" th:field="*{email}" class="form-control" readonly>
+                </div>
+                <br/>
+
+                <div>
+                    <button class="w-100 btn btn-primary btn-lg"
+                            onclick="location.href='editInfo.html'"
+                            th:onclick="|location.href='@{/members/{id}/edit (id=${member.id})}'|"
+                            type="button" th:text="#{button.edit}">Edit</button>
+                </div>
+            </form>
+
+            <script>
+                var result = '[[${result}]]';
+                if (result === 'editInfoOK') {
+                    alert('회원 정보가 수정되었습니다.');
+                }
+
+            </script>
+            <br/>
+            <div th:replace="fragments/footer :: footer" />
+        </div>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

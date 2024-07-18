@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+            <div class="py-1 text-center">
+                <h2 th:text="#{page.boardView}">게시글 상세</h2>
+            </div>
+            <form th:object="${board}">
+                <div class="form-group">
+                    <label th:for="writer" th:text="#{label.board.writer}">작성자</label>
+                    <input type="text" th:field="*{writer}" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label th:for="title" th:text="#{label.board.title}">제목</label>
+                    <input type="text" th:field="*{title}" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label th:for="content" th:text="#{label.board.content}">내용</label>
+                    <textarea th:field="*{content}" class="form-control" rows="6" readonly></textarea>
+                </div>
+                <br/>
+                <div>
+                    <label th:for="attachFile" th:text="#{label.board.file}">첨부 파일</label>
+                    <a th:if="*{attachFile}" th:href="|/attach/${board.id}|"
+                       th:text="${board.getAttachFile().getUploadFileName()}" />
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label th:for="createdDateTime" th:text="#{label.board.date}">날짜 및 시간</label>
+                    <input type="text" th:field="*{createdDateTime}" class="form-control" readonly>
+                </div>
+                <br/>
+            </form>
+
+            <br/>
+            <div class="row">
+                <div class="col" th:if="${board.writer == member.loginId}">
+                    <button class="w-100 btn btn-primary btn-lg"
+                            onclick="location.href='updateBoardForm.html'"
+                            th:onclick="|location.href='@{/boards/{id}/edit (id=${board.id})}'|"
+                            type="button" th:text="#{button.edit}">Edit</button>
+                </div>
+                <div class="col" th:if="${board.writer == member.loginId}">
+                    <button class="w-100 btn btn-primary btn-lg"
+                            onclick="location.href='boardList.html'"
+                            th:onclick="|location.href='@{/boards/{id}/delete (id=${board.id})}'|"
+                            type="button" th:text="#{button.delete}">Delete</button>
+                </div>
+                <div class="col">
+                    <button class="w-100 btn btn-secondary btn-lg"
+                            onclick="location.href='boardList.html'"
+                            th:onclick="|location.href='@{/boards}'|"
+                            type="button" th:text="#{button.list}">List</button>
+                </div>
+            </div>
+
+            <br/>
+
+            <!-- 댓글작성 부분 -->
+            <div style="background-color: #f2f2f2; padding-top: 30px; padding-bottom: 60px; padding-left: 20px; padding-right: 20px; border-radius: 5px;">
+
+                <!-- 댓글 보기 -->
+                <div class="form-group">
+                    <div th:each="comment : ${comments}">
+                        <br/>
+                        <label th:text="${comment.member.loginId}"></label>
+                        <input type="text" th:value="${comment.content}" class="form-control" readonly>
+                        <div th:if="${comment.member.loginId == member.loginId}">
+                            <button class="btn btn-primary btn-secondary float-end"
+                                    th:onclick="|location.href='@{/boards/{id}/comment/{commentId}/delete (id=${board.id}, commentId=${comment.id})}'|"
+                                    type="button" th:text="#{button.delete}">Delete</button>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <hr>
+                <!-- 댓글 작성 -->
+                <form th:object="${commentForm}" th:action="@{/boards/{boardId}/comment (boardId=${board.id})}" method="post">
+                    <div class="form-group">
+                        <label th:for="content" th:text="#{label.comment}">댓글 작성</label>
+                        <textarea th:field="*{content}" class="form-control" rows="3"></textarea>
+                        <br/>
+                        <button type="submit" class="btn btn-primary btn-secondary float-end" th:text="#{button.comment}">댓글 작성</button>
+                    </div>
+                </form>
+
+            </div>
+
+
+            <script>
+                var result = '[[${result}]]';
+                if (result === 'registerOK') {
+                    alert('글 작성이 완료되었습니다.');
+                }
+                if (result === 'modifyOK') {
+                    alert('글 수정이 완료되었습니다.');
+                }
+
+
+            </script>
+
+            <div th:replace="fragments/footer :: footer" />
+        </div>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>
